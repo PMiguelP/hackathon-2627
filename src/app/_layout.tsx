@@ -1,18 +1,31 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import { Stack, ThemeProvider, DefaultTheme } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { RaizesColors } from '@/constants/raizes-theme';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+/**
+ * Fluxo:
+ *   intro (6 slides) → login ──────────────→ (tabs) feed
+ *                        └→ register → onboarding ↗
+ */
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider
+      value={{ ...DefaultTheme, colors: { ...DefaultTheme.colors, background: RaizesColors.linhoFundo } }}>
       <AnimatedSplashOverlay />
-      <AppTabs />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="intro" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
+        <Stack.Screen name="onboarding" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="publicar" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="evento-detalhe" options={{ presentation: 'modal' }} />
+      </Stack>
     </ThemeProvider>
   );
 }
